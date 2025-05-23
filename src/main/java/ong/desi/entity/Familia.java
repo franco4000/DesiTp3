@@ -12,13 +12,13 @@ public class Familia {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id; //nro de familia 
-    private String nombre;
-    private LocalDate fechaAlta = LocalDate.now(); // Valor por defecto
+    private String nombre; //Nombre de familia 
+    private LocalDate fechaAlta = LocalDate.now(); // Fecha de alta con valor por defecto 
     private LocalDate fechaUltimaAsistencia; // Simulada
 
     @OneToMany(mappedBy = "familia", cascade = CascadeType.ALL)
-    private List<Integrante> integrantes = new ArrayList<>();
-    private boolean activa = true; // Para eliminación lógica
+    private List<Integrante> integrantes = new ArrayList<>(); //Lista de integrantes incluida en la entidad Familia y recibida en @RequestBody.
+    private boolean activa = true; //  la baja de familia está implementada como eliminación lógica,
     
     // Constructor vacío requerido por JPA
     public Familia() {

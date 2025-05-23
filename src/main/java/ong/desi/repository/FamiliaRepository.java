@@ -1,7 +1,6 @@
 package ong.desi.repository;
 
 import java.util.List;
-import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -10,8 +9,9 @@ import ong.desi.entity.Familia;
 
 public interface FamiliaRepository extends JpaRepository<Familia, Long> {
 	
+	List<Familia> findByNombre(String nombre);
 	 @Query("SELECT f FROM Familia f WHERE f.activa = true")
-	    List<Familia> findAllActivas();
+	    List<Familia> listarActivas(); //findAllActivas();
 
 	// Buscar por nombre (exacto)
 	 List<Familia> findByNombreIgnoreCase(String nombre);

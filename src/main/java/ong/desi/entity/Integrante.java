@@ -11,7 +11,7 @@ public class Integrante {
     private Long id;
     
     @Column(unique = true)  // DNI
-    private Long dni;
+    private Long dni;  // Datos requeridos en Integrante 
     
     private String apellido;
     private String nombre;
