@@ -3,8 +3,10 @@ package ong.desi.service;
 import ong.desi.entity.Familia;
 import java.util.List;
 
+import org.springframework.stereotype.Service;
 
 
+@Service
 public interface FamiliaService {
     
 
