@@ -1,5 +1,6 @@
 package ong.desi.entity;
 
+
 public enum Ocupacion {
 	 
 	    DESEMPLEADO,

@@ -13,18 +13,18 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 
-@Service
+@Service 
 @Transactional
-public class FamiliaServiceImpl implements FamiliaService {
+public class FamiliaServiceImpl implements FamiliaService {//implementa los métodos  la interfaz FamiliaService.
 	
-	 @Autowired
+	 @Autowired 
 	    private FamiliaRepository familiaRepository;
 
 	  @Autowired
 	    private IntegranteRepository integranteRepository;
 
 	  @Override
-	  public Familia crearFamilia(Familia familia) {
+	  public Familia crearFamilia(Familia familia) {// validando datos y guardando tanto la familia como sus integrantes.
 	      // Validación básica del nombre
 	      if (familia.getNombre() == null || familia.getNombre().trim().isEmpty()) {
 	          throw new IllegalArgumentException("El nombre de la familia es requerido");
@@ -59,13 +59,13 @@ public class FamiliaServiceImpl implements FamiliaService {
 	  
 	  
 	    @Override
-	    public List<Familia> listarTodas() {
+	    public List<Familia> listarTodas() {//Devuelve una lista de familias activas solamente.
 	        return familiaRepository.listarActivas();
 	    }
 	    
 	    @Override
 	    public List<Familia> buscarPorNombre(String nombre) {
-	        return familiaRepository.buscarPorNombreParcial(nombre); // o findByNombreIgnoreCase(nombre)
+	        return familiaRepository.buscarPorNombreParcial(nombre); 
 	    }
 
 
@@ -77,22 +77,22 @@ public class FamiliaServiceImpl implements FamiliaService {
 
 	
 	    @Override
-	    public void eliminarFamilia(Long id) {
+	    public void eliminarFamilia(Long id) {// una baja lógica de la familia y sus integrantes.
 	        Familia familia = familiaRepository.findById(id)
 	            .orElseThrow(() -> new IllegalArgumentException("Familia no encontrada"));
 
-	        // Baja lógica de la familia
+	        // Baja de la familia
 	        familia.setActiva(false);
 
-	        // Baja lógica de los integrantes
+	        // Baja de los integrantes
 	        if (familia.getIntegrantes() != null) {
 	            for (Integrante integrante : familia.getIntegrantes()) {
 	                integrante.setActivo(false);
-	                integranteRepository.save(integrante); // Guardamos el cambio
+	                integranteRepository.save(integrante); // Guarda cambio
 	            }
 	        }
 
-	        // Guardamos la familia
+	        // Guardamos familia
 	        familiaRepository.save(familia);
 	    }
 	    
@@ -106,7 +106,7 @@ public class FamiliaServiceImpl implements FamiliaService {
 	        familiaExistente.setNombre(familiaActualizada.getNombre());
 	        familiaExistente.setFechaAlta(familiaActualizada.getFechaAlta());
 
-	        // 2. Actualizamos integrantes
+	        // 2. Actualizamos integrantes  Marcar como inactivos los que ya no están
 	        if (familiaActualizada.getIntegrantes() != null) {
 	            // Primero, marcamos como inactivos los actuales que no estén en la nueva lista
 	            for (Integrante existente : familiaExistente.getIntegrantes()) {
@@ -141,6 +141,6 @@ public class FamiliaServiceImpl implements FamiliaService {
 	            }
 	        }
 
-	        return familiaRepository.save(familiaExistente);
+	        return familiaRepository.save(familiaExistente);//guardamos cambios
 	    }
 }

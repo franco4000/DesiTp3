@@ -7,24 +7,28 @@ import java.util.List;
 
 import jakarta.persistence.*;
 
-@Entity
+@Entity 
 public class Familia {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; //nro de familia 
-    private String nombre; //Nombre de familia 
+    private Long id; 
+    private String nombre;  
     private LocalDate fechaAlta = LocalDate.now(); // Fecha de alta con valor por defecto 
-    private LocalDate fechaUltimaAsistencia; // Simulada
+    private LocalDate fechaUltimaAsistencia; 
 
+    //mappedBy = "familia": indica que la relación está mapeada en el atributo familia de la clase Integrante.
     @OneToMany(mappedBy = "familia", cascade = CascadeType.ALL)
-    private List<Integrante> integrantes = new ArrayList<>(); //Lista de integrantes incluida en la entidad Familia y recibida en @RequestBody.
-    private boolean activa = true; //  la baja de familia está implementada como eliminación lógica,
+    private List<Integrante> integrantes = new ArrayList<>(); 
+    @OneToMany(mappedBy = "familia")
+    private List<Asistido> asistidos;
+
+     private boolean activa = true; 
     
-    // Constructor vacío requerido por JPA
+   
     public Familia() {
     }
     
-    // Getters y setters
+    
     public Long getId() {
         return id;
     }
@@ -54,9 +58,9 @@ public class Familia {
         return integrantes;
     }
 
-    public void setIntegrantes(List<Integrante> integrantes) {
+    public void setIntegrantes(List<Integrante> integrantes) {//asigamos una lista de integrantes ala familia
         this.integrantes = integrantes;
-     // Relación bidireccional (importante para JPA)
+     // Relación bidireccional
         for (Integrante i : integrantes) {
             i.setFamilia(this);
         }
@@ -70,7 +74,7 @@ public class Familia {
         this.activa = activa;
     }
     
-    // Método helper para agregar integrantes
+    // Método para agregar integrantes , También asegura que el integrante sepa a que familia pertenece.
     public void agregarIntegrante(Integrante integrante) {
         integrantes.add(integrante);
         integrante.setFamilia(this);
@@ -85,7 +89,7 @@ public class Familia {
 		this.fechaUltimaAsistencia = fechaUltimaAsistencia;
 	}
 	
-	public long contarIntegrantesActivos() {
+	public long contarIntegrantesActivos() {//Devuelve la cantidad de integrantes activos.
 	    return integrantes.stream()
 	                     .filter(Integrante::isActivo)
 	                     .count();

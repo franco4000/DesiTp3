@@ -7,72 +7,34 @@ import java.time.LocalDate;
 
 @Entity
 public class Integrante extends Persona {
-    @Id
-    private Long id;
-    
-    @Column(unique = true)  // DNI
-    private Long dni;  // Datos requeridos en Integrante 
-    
-    private String apellido;
-    private String nombre;
-    private LocalDate fechaNacimiento;
-    private int edad;
+	private int edad;
     private String parentesco;
-    
+
     @Enumerated(EnumType.STRING)
     private Ocupacion ocupacion;
-    
+
+    private boolean activo = true;
+
     @ManyToOne
     @JoinColumn(name = "familia_id")
     private Familia familia;
 
-    public Familia getFamilia() {
-        return familia;
+   
+
+    public int getEdad() {
+        return edad;
     }
 
-    public void setFamilia(Familia familia) {
-        this.familia = familia;
+    public void setEdad(int edad) {
+        this.edad = edad;
     }
 
-    
-    private boolean activo = true; // Para eliminación lógica
-    
-  
-    public Integrante() {
-    }
-    
-    // Getters y setters
-    public Long getDni() {
-        return dni;
+    public String getParentesco() {
+        return parentesco;
     }
 
-    public void setDni(Long dni) {
-        this.dni = dni;
-    }
-
-
-    public String getApellido() {
-        return apellido;
-    }
-
-    public void setApellido(String apellido) {
-        this.apellido = apellido;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public LocalDate getFechaNacimiento() {
-        return fechaNacimiento;
-    }
-
-    public void setFechaNacimiento(LocalDate fechaNacimiento) {
-        this.fechaNacimiento = fechaNacimiento;
+    public void setParentesco(String parentesco) {
+        this.parentesco = parentesco;
     }
 
     public Ocupacion getOcupacion() {
@@ -83,7 +45,6 @@ public class Integrante extends Persona {
         this.ocupacion = ocupacion;
     }
 
-
     public boolean isActivo() {
         return activo;
     }
@@ -92,20 +53,12 @@ public class Integrante extends Persona {
         this.activo = activo;
     }
 
-	public int getEdad() {
-		return edad;
-	}
+    public Familia getFamilia() {
+        return familia;
+    }
 
-	public void setEdad(int edad) {
-		this.edad = edad;
-	}
-
-	public String getParentesco() {
-		return parentesco;
-	}
-
-	public void setParentesco(String parentesco) {
-		this.parentesco = parentesco;
-	}
+    public void setFamilia(Familia familia) {
+        this.familia = familia;
+    }
 }
 
