@@ -1,11 +1,13 @@
 package ong.desi.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
 import ong.desi.entity.Integrante;
 
 import java.util.List;
 import java.util.Optional;
-
+@Repository
 public interface IntegranteRepository extends JpaRepository<Integrante, Long> {
     
     // Método para verificar si existe un DNI
