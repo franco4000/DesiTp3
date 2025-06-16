@@ -7,7 +7,10 @@ import java.time.LocalDate;
 
 @Entity
 public class Integrante extends Persona {
-	private int edad;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+    private int edad;
     private String parentesco;
 
     @Enumerated(EnumType.STRING)
@@ -21,7 +24,20 @@ public class Integrante extends Persona {
 
    
 
-    public int getEdad() {
+    public Integrante() {
+		super();
+		
+	}
+    
+    public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public int getEdad() {
         return edad;
     }
 

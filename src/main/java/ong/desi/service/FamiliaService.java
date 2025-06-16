@@ -1,12 +1,12 @@
 package ong.desi.service;
 
+import ong.desi.controller.view.FamiliaForm;
 import ong.desi.entity.Familia;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
 
-@Service
 public interface FamiliaService {
     
 
@@ -20,6 +20,10 @@ public interface FamiliaService {
 	    Familia buscarPorId(Long id);
 	    
 	    void eliminarFamilia(Long id);
+
+	    int contarIntegrantesActivos(Long familiaId);
+	    FamiliaForm convertirAFamiliaForm(Familia familia);
+
 	}
 
     

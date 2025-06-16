@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Alta de Familia</title>
+    <meta charset="UTF-8"/>
+	<link rel="stylesheet" th:href="@{/css/styles.css}">
+
+</head>
+<body>
+	<div class="container"> 
+	<h1 th:text="${familiaForm.id != null} ? 'Editar Familia' : 'Registrar Nueva Familia'"></h1>
+
+	<div th:if="${error}" class="alert-error" role="alert">
+	    <p th:text="${error}"></p>
+	</div>
+	<div th:if="${mensaje}" th:classappend="${#strings.contains(mensaje, 'éxito')} ? 'alert-success' : 'alert-error'">
+	        <p th:text="${mensaje}"></p>
+	    </div>
+	<div th:if="${mensaje}" class="alert-success" role="alert">
+	    <p th:text="${mensaje}"></p>
+	</div>
+
+
+	<!-- formulario de la familia --> 
+    <form th:action="@{/vista/familias/guardar}" th:object="${familiaForm}" method="post">
+		<input type="hidden" th:field="*{id}" />
+		
+		<div>
+        <label for="nombre">Nombre de la familia:</label>
+        <input type="text" th:field="*{nombre}" required/><br/>
+		<span th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></span>
+		</div>
+		
+		<div> 
+        <label for="fechaAlta">Fecha de alta:</label>
+        <input type="date" th:field="*{fechaAlta}" /><br/>
+		<span th:if="${#fields.hasErrors('fechaAlta')}" th:errors="*{fechaAlta}"></span>
+		</div>
+		
+		<input type="hidden" th:field="*{id}" />
+        <input type="checkbox" th:field="*{activa}" /> Activa <br/>
+
+		<!-- Seccion de  integrante -->
+		
+		<h3>Integrantes</h3>
+		<div th:each="integrante, iterStat : *{integrantes}">
+		    <fieldset>
+		        <legend th:text="'Integrante #' + ${iterStat.index + 1}"></legend>
+
+		        <label>DNI:</label>
+		        <input type="number" th:field="*{integrantes[__${iterStat.index}__].dni} "*{dni}" min="1000000" max="99999999" required" /><br/>
+
+		        <label>Nombre:</label>
+		        <input type="text" th:field="*{integrantes[__${iterStat.index}__].nombre}"  pattern="[A-Za-zÁÉÍÓÚáéíóúñÑ\s]+" minlength="2" required /><br/>
+
+		        <label>Apellido:</label>
+		        <input type="text" th:field="*{integrantes[__${iterStat.index}__].apellido} "pattern="[A-Za-zÁÉÍÓÚáéíóúñÑ\s]+" minlength="2" required /><br/>
+
+		        <label>Fecha de nacimiento:</label>
+		        <input type="date" th:field="*{integrantes[__${iterStat.index}__].fechaNacimiento}" /><br/>
+
+		        <label>Domicilio:</label>
+		        <input type="text" th:field="*{integrantes[__${iterStat.index}__].domicilio}" /><br/>
+
+		        <label>Edad:</label>
+		        <input type="number" th:field="*{integrantes[__${iterStat.index}__].edad}" /><br/>
+
+		        <label>Parentesco:</label>
+		        <input type="text" th:field="*{integrantes[__${iterStat.index}__].parentesco}" /><br/>
+
+		        <label>Ocupación:</label>
+		        <select th:field="*{integrantes[__${iterStat.index}__].ocupacion}">
+		            <option th:each="op : ${T(ong.desi.entity.Ocupacion).values()}"
+		                    th:value="${op}" th:text="${op}"></option>
+		        </select>
+
+				<!-- BOTÓN PARA ELIMINAR ESTE INTEGRANTE -->
+				<form th:action="@{/vista/familias/familia/form/eliminarIntegrante}" method="post" th:object="${familiaForm}" style="display:inline">
+				    <input type="hidden" name="indice" th:value="${iterStat.index}" />
+				    <input type="hidden" th:field="*{id}" />
+				    <button type="submit" name="action" value="eliminar"
+				            th:formaction="@{/vista/familias/familia/form/eliminarIntegrante}"
+				            class="btn-eliminar">Eliminar Integrante</button>
+				</form>
+
+				            </fieldset>
+				            <hr/>
+				        </div>
+
+				        <!-- BOTÓN PARA GUARDAR LA FAMILIA -->
+				        <div style="margin-top: 20px;">
+				            <button type="submit" name="accion" value="guardar" class="btn-guardar">Guardar familia</button>
+				        </div>
+				    </form> 
+
+				    <!-- FORMULARIO PARA AGREGAR INTEGRANTE -->
+				    <form th:action="@{/vista/familias/familia/form/agregarIntegrante}" method="post" th:object="${familiaForm}">
+				        <input type="hidden" th:field="*{id}" />
+				        <button type="submit" class="btn-agregar">Agregar integrante</button>
+				    </form>
+
+				    <!-- BOTÓN PARA VOLVER AL LISTADO -->
+				    <a th:href="@{/vista/familias}">
+				        <button type="button">Volver al Listado</button>
+				    </a>
+				</div>
+	</body>
+
+</html>
+
+
