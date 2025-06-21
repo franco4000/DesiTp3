@@ -18,6 +18,7 @@ public interface FamiliaRepository extends JpaRepository<Familia, Long> {
 	// Buscar por nombre 
 	 List<Familia> findByNombreIgnoreCase(String nombre);
 
+	 List<Familia> findByActivaTrue();
 
 	 @Query("SELECT f FROM Familia f WHERE LOWER(f.nombre) LIKE LOWER(CONCAT('%', :nombre, '%')) AND f.activa = true")
 	 List<Familia> buscarPorNombreParcial(@Param("nombre") String nombre);

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Listado de Familias</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}" />
+</head>
+<body>
+	<div class="container">
+  <h1>Familias Asistidas</h1>
+
+<form th:action="@{/familias}" method="get">
+    <input type="text" name="nombre" placeholder="Buscar por nombre" th:value="${param.nombre}" />
+    <button type="submit">Buscar</button>
+	
+	<a th:href="@{/vista/familias/listado}">
+	    <button type="button">Ver Listado Completo</button>
+	</a>
+
+	
+    <a th:href="@{/familias}">Limpiar</a>
+</form>
+
+<a th:href="@{/vista/familias/nueva}">Nueva Familia</a>
+
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Integrantes</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr th:each="familia : ${familias}">
+            <td th:text="${familia.id}">1</td>
+            <td th:text="${familia.nombre}">Nombre</td>
+            <td th:text="${#lists.size(familia.integrantes)}">0</td>
+            <td>
+				<div class="botones-accion">
+                <a th:href="@{/vista/familias/familia/form(id=${familia.id})}" class="btn-editar"  style="display:inline">Editar</a>
+                <form th:action="@{/familias/{id}/eliminar(id=${familia.id})}" method="post" style="display:inline">
+                    <button type="submit" onclick="return confirm('¿Seguro que querés eliminar esta familia?')">Eliminar</button>
+                </form>
+				</div>
+            </td>
+        </tr>
+    </tbody>
+</table>
+</div>
+</body>
+</html>

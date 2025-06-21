@@ -1,5 +1,7 @@
 package ong.desi.service.impl;
 
+import ong.desi.controller.view.FamiliaForm;
+import ong.desi.controller.view.IntegranteForm;
 import ong.desi.entity.Familia;
 import ong.desi.entity.Integrante;
 import ong.desi.repository.FamiliaRepository;
@@ -12,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service 
 @Transactional
@@ -60,7 +63,7 @@ public class FamiliaServiceImpl implements FamiliaService {//implementa los mét
 	  
 	    @Override
 	    public List<Familia> listarTodas() {//Devuelve una lista de familias activas solamente.
-	        return familiaRepository.listarActivas();
+	        return familiaRepository.findByActivaTrue();
 	    }
 	    
 	    @Override
@@ -73,6 +76,15 @@ public class FamiliaServiceImpl implements FamiliaService {//implementa los mét
 	    public Familia buscarPorId(Long id) {
 	        return familiaRepository.findById(id)
 	            .orElseThrow(() -> new IllegalArgumentException("Familia no encontrada"));
+	    }
+
+	    @Override
+	    public int contarIntegrantesActivos(Long familiaId) {
+	        Familia familia = familiaRepository.findById(familiaId)
+	            .orElseThrow(() -> new RuntimeException("Familia no encontrada"));
+	        return (int) familia.getIntegrantes().stream()
+	            .filter(Integrante::isActivo)
+	            .count();
 	    }
 
 	
@@ -143,4 +155,32 @@ public class FamiliaServiceImpl implements FamiliaService {//implementa los mét
 
 	        return familiaRepository.save(familiaExistente);//guardamos cambios
 	    }
+	    public FamiliaForm convertirAFamiliaForm(Familia familia) {
+	        FamiliaForm form = new FamiliaForm();
+	        form.setId(familia.getId());
+	        form.setNombre(familia.getNombre());
+	        form.setFechaAlta(familia.getFechaAlta());
+
+	        List<IntegranteForm> integranteForms = familia.getIntegrantes().stream()
+	                .filter(Integrante::isActivo)
+	                .map(integrante -> {
+	                    IntegranteForm iform = new IntegranteForm();
+	                    iform.setId(integrante.getId());
+	                    iform.setNombre(integrante.getNombre());
+	                    iform.setApellido(integrante.getApellido());
+	                    iform.setDni(integrante.getDni());
+	                    iform.setFechaNacimiento(integrante.getFechaNacimiento());
+	                    iform.setDomicilio(integrante.getDomicilio());
+	                    iform.setEdad(integrante.getEdad());
+	                    iform.setParentesco(integrante.getParentesco());
+	                    iform.setOcupacion(integrante.getOcupacion());
+	                    iform.setActiva(true);
+	                    return iform;
+	                })
+	                .collect(Collectors.toList());
+
+	        form.setIntegrantes(integranteForms);
+	        return form;
+	    }
+
 }
