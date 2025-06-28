@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <body>
+        <!-- fragmento “navbar” -->
+        <div th:fragment="navbar">
+            <nav>
+                <a th:href="@{/}">Inicio</a> |
+                <a th:href="@{/recetas/nueva}">Nueva Receta</a> |
+                <a th:href="@{/ingredientes/nuevo}">Nuevo Ingrediente</a> |
+                <a th:href="@{/recetas}">Listado de Recetas</a>
+            </nav>
+            <hr/>
+        </div>
+    </body>
+</html>

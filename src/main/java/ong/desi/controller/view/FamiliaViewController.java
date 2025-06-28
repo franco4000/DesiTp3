@@ -16,6 +16,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import jakarta.validation.Valid;
 import ong.desi.entity.Familia;
+import ong.desi.exception.Excepcion;
 import ong.desi.service.FamiliaService;
 
 import java.util.List;
@@ -56,14 +57,22 @@ public class FamiliaViewController {
 
     @PostMapping("/guardar")
     public String guardar(@Valid @ModelAttribute("familiaForm") FamiliaForm form,
-                          BindingResult result, Model model, RedirectAttributes redirect,
-                          SessionStatus status) {
+                          BindingResult result, Model model,   @RequestParam String accion,
+                          SessionStatus status, RedirectAttributes redirectAttributes) {
+    	//agregar integrantes 
+    	if ("agregar".equals(accion)) {
+            form.getIntegrantes().add(new IntegranteForm());
+            model.addAttribute("familiaForm", form);
+            return "familias/familia-form";
+        }
 
-    	System.out.println("Form recibido: " + form);
-      
-    	  if (result.hasErrors()) {
-    		  
-    	  System.out.println("Errores de validación: " + result.getAllErrors());
+    	//  Eliminar integrante 
+        if (accion.startsWith("eliminar_")) {
+        	int index = Integer.parseInt(accion.replace("eliminar_", ""));
+            if (index >= 0 && index < form.getIntegrantes().size()) {
+                form.getIntegrantes().remove(index);
+            }
+            model.addAttribute("familiaForm", form);
             return "familias/familia-form";
         }
 
@@ -77,7 +86,7 @@ public class FamiliaViewController {
                 existente.setNombre(form.getNombre());
                 existente.setFechaAlta(form.getFechaAlta());
                familiaService.actualizarFamilia(existente.getId(), existente);
-               redirect.addFlashAttribute("mensaje", "¡Familia editada con éxito!");
+               redirectAttributes.addFlashAttribute("mensaje", "¡Familia editada con éxito!");
             } else {
                model.addAttribute("error", "La familia no existe.");
                 return "familias/familia-form";
@@ -86,7 +95,7 @@ public class FamiliaViewController {
             //  alta
             Familia nueva = form.toEntidad();
             familiaService.crearFamilia(nueva);
-            redirect.addFlashAttribute("mensaje", "¡Familia registrada con éxito!");
+            redirectAttributes.addFlashAttribute("mensaje", "¡Familia registrada con éxito!");
         }
 
               

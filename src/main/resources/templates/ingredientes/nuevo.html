@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Nuevo Ingrediente</title>
+	<link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head>
+<body>
+
+<h2>Nuevo Ingrediente</h2>
+
+<form th:action="@{/ingredientes/guardar}" th:object="${form}" method="post">
+	<div th:if="${#fields.hasErrors('*')}" style="color:red;">
+	       <ul>
+	           <li th:each="err : ${#fields.errors('*')}" th:text="${err}"></li>
+	       </ul>
+	   </div>
+	   
+	   <label>Tipo:</label>
+	   <select th:field="*{tipo}" required>
+	       <option value="" disabled>-- Seleccioná un tipo --</option>
+	       <option value="PRODUCTO">Producto</option>
+	       <option value="CONDIMENTO">Condimento</option>
+	   </select><br>
+
+
+
+    <label>Nombre:</label>
+    <input type="text" th:field="*{nombre}" required/><br>
+
+    <label>Calorías:</label>
+    <input type="number" step="any" th:field="*{calorias}" required/><br>
+
+    <label>Estación sugerida:</label>
+    <select th:field="*{estacion}" required>
+        <option th:each="e : ${estaciones}" th:value="${e}" th:text="${e}"></option>
+    </select><br>
+
+    <!-- Campo visible solo si es Producto--> 
+    <div th:if="${form.tipo?.name() == 'PRODUCTO'}"> 
+		<!--<th:block th:if="${form.tipo.name() == T(ong.desi.entity.TipoIngrediente).PRODUCTO.name()}"> -->
+        <label>Stock disponible (kg):</label>
+        <input type="number" step="any" th:field="*{stockDisponible}" required/><br>
+        
+        <label>Precio actual:</label>
+        <input type="number" step="any" th:field="*{precioActual}" required/><br>
+    </div>
+
+    <button type="submit">Guardar</button>
+</form>
+
+
+<p th:if="${mensaje}" th:text="${mensaje}" style="color: green;"></p>
+
+</body>
+</html>
+

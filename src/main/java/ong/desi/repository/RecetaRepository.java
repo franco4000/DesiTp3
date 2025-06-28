@@ -11,8 +11,9 @@ import ong.desi.entity.Receta;
 @Repository
 public interface RecetaRepository extends JpaRepository<Receta, Long> {
     Optional<Receta> findByNombre(String nombre);
-    Optional<Receta> findByIdAndActivaTrue(Long id);
     List<Receta> findByActivaTrue();
+    Optional<Receta> findByIdAndActivaTrue(Long id);
+
     
     @Query("SELECT r FROM Receta r JOIN r.items i " +
     	       "WHERE r.activa = true " +

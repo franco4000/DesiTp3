@@ -1,6 +1,10 @@
 package ong.desi.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,14 +14,17 @@ public class Receta {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    @NotBlank(message = "El nombre es obligatorio")
     @Column(unique = true, nullable = false)
     private String nombre;
-
+    @NotBlank(message = "La descripción es obligatoria")
     @Column(nullable = false, length = 1000)
     private String descripcion;
 
-    @OneToMany(mappedBy = "receta", cascade = CascadeType.ALL, orphanRemoval = true)
+    
+    @Size(min = 1, message = "La receta debe tener al menos un ingrediente")
+    @OneToMany(mappedBy = "receta", cascade = CascadeType.ALL, orphanRemoval = true) 
+    @Valid
     private List<ItemReceta> items = new ArrayList<>();
 
     @Column(nullable = false)

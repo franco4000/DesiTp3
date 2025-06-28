@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Listado de Recetas</title>
+	<link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head>
+<body>
+    <h2>Listado de Recetas</h2>
+
+    <!-- FORMULARIO DE FILTRO -->
+    <form method="get" th:action="@{/recetas}">
+        <label>Nombre:</label>
+        <input type="text" name="nombre" th:value="${param.nombre}" />
+
+        <label>Calorías mínimas:</label>
+        <input type="number" name="minCalorias" th:value="${param.minCalorias}" />
+
+        <label>Calorías máximas:</label>
+        <input type="number" name="maxCalorias" th:value="${param.maxCalorias}" />
+
+        <button type="submit" class="boton">Filtrar</button>
+    </form>
+
+    <!-- SOLO MUESTRO LA TABLA SI recetas NO ES NULL -->
+    <div th:if="${recetas != null}">
+        <table th:if="${!recetas.empty}">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Calorías Totales</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="receta : ${recetas}">
+                    <td th:text="${receta.nombre}"></td>
+                    <td th:text="${#numbers.sum(receta.items.![calorias])?: 0 }"></td>
+                    <td>
+                        <a th:href="@{'/recetas/editar/' + ${receta.id}}">Modificar</a> |
+                        <a th:href="@{'/recetas/eliminar/' + ${receta.id}}">Eliminar</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Muestra mensaje solo si ya se buscó y no hubo resultados -->
+        <p th:if="${recetas.empty}">
+            <em>No hay recetas que coincidan</em>
+        </p>
+    </div>
+
+    <br/>
+    <a th:href="@{/recetas/nueva}" class="boton">Nueva Receta</a>
+</body>
+</html>
+

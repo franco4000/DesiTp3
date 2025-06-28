@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Listado de Ingredientes</title>
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head>
+<body>
+
+<h2>Listado de Ingredientes Activos</h2>
+
+<!-- FORMULARIO DE FILTRO -->
+<form method="get" th:action="@{/ingredientes}">
+    <label>Nombre:</label>
+    <input type="text" name="nombre" th:value="${param.nombre}" />
+
+    <label>Estación:</label>
+    <select name="estacion">
+        <option value="">-- Todas --</option>
+        <option th:each="est : ${estaciones}" th:value="${est}" th:text="${est}" 
+                th:selected="${param.estacion == est}"></option>
+    </select>
+
+    <label>Tipo:</label>
+    <select name="tipo">
+        <option value="">-- Todos --</option>
+        <option th:each="tipo : ${tipos}" th:value="${tipo}" th:text="${tipo}" 
+                th:selected="${param.tipo == tipo}"></option>
+    </select>
+
+    <button type="submit" class="boton">Filtrar</button>
+</form>
+
+
+<!-- TABLA DE INGREDIENTES -->
+<div th:if="${ingredientes != null}">
+    <table th:if="${!ingredientes.empty}">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Calorías</th>
+                <th>Estación</th>
+                <th>Tipo</th>
+                <th th:text="'Precio'">Precio</th>
+                <th th:text="'Stock'">Stock</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="ing : ${ingredientes}">
+                <td th:text="${ing.nombre}"></td>
+                <td th:text="${ing.calorias}"></td>
+                <td th:text="${ing.estacion}"></td>
+                <td th:text="${ing.tipo}"></td>
+                <td th:text="${#fields.hasField(ing, 'precioActual') ? ing.precioActual : '-'}"></td>
+                <td th:text="${#fields.hasField(ing, 'stockDisponible') ? ing.stockDisponible : '-'}"></td>
+                <td>
+                    <a th:href="@{'/ingredientes/editar/' + ${ing.id}}">Modificar</a> |
+                    <a th:href="@{'/ingredientes/baja/' + ${ing.id}}">Eliminar</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p th:if="${ingredientes.empty}">
+        <em>No hay ingredientes que coincidan</em>
+    </p>
+</div>
+
+<br/>
+<a th:href="@{/ingredientes/nuevo}" class="boton">Nuevo Ingrediente</a>
+
+</body>
+</html>

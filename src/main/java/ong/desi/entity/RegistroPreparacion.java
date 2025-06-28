@@ -5,6 +5,10 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PastOrPresent;
+import jakarta.validation.constraints.Positive;
+
 import java.time.LocalDateTime;
 
 
@@ -15,11 +19,12 @@ public class RegistroPreparacion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull(message = "Debe seleccionar una receta")
     @ManyToOne
     private Receta receta;
-
+    @Positive(message = "La cantidad de preparaciones debe ser mayor que 0")
     private int cantidadPreparaciones;
-
+    @PastOrPresent(message = "La fecha no puede ser futura")
     private LocalDateTime fecha;
 
     public RegistroPreparacion() {

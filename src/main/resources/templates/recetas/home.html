@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Página Principal</title>
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head>
+<body>
+
+<!-- Menú común -->
+<div th:replace="recetas/menu :: navbar"></div>
+
+<!-- Contenido principal -->
+<div style="max-width: 600px; margin: auto;">
+    <h2>Bienvenido al sistema de recetas</h2>
+
+    <a th:href="@{/recetas/nueva}" class="boton">Crear Receta</a>
+    <a th:href="@{/ingredientes/nuevo}" class="boton">Nuevo Ingrediente</a>
+    <a th:href="@{/recetas}" class="boton">Ver Listado</a>
+</div>
+
+</body>
+</html>

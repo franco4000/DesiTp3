@@ -1,8 +1,16 @@
 package ong.desi.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import java.util.*;
-import jakarta.persistence.*;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Transient;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 
 @Entity
 public class ItemReceta {
@@ -14,9 +22,13 @@ public class ItemReceta {
     @JoinColumn(name = "ingrediente_id", nullable = false)
     private Ingrediente ingrediente;
 
+    @NotNull(message = "La cantidad es obligatoria")
+    @Positive(message = "La cantidad debe ser mayor a 0")
     @Column(nullable = false)
     private Float cantidad; // en kg
 
+    @NotNull(message = "Las calorías son obligatorias")
+    @PositiveOrZero(message = "Las calorías deben ser 0 o más")
     @Column(nullable = false)
     private Integer calorias;
     
@@ -27,6 +39,13 @@ public class ItemReceta {
     @JoinColumn(name = "receta_id",  nullable = false)
     private Receta receta;
 
+    @Transient                     
+    private Long ingredienteId;
+    public Long getIngredienteId() { 
+    	return ingredienteId; }
+    
+    public void setIngredienteId(Long ingredienteId) {
+    	this.ingredienteId = ingredienteId; }
     
 	public Long getId() {
 		return id;

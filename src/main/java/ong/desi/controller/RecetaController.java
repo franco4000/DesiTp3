@@ -1,5 +1,6 @@
 package ong.desi.controller;
 
+import ong.desi.entity.Receta;
 
 import ong.desi.entity.Receta;
 import ong.desi.service.RecetaService;
@@ -19,13 +20,11 @@ public class RecetaController {
     
 // GET RECETA listado con filtro por nombre y calorias (HU4)
     @GetMapping
-    public List<Receta> listarRecetas(
-    		@RequestParam(required = false) String nombre,
-            @RequestParam(required = false) Integer minCalorias,
-            @RequestParam(required = false) Integer maxCalorias
-    ) {
-    	 return recetaService.filtrar(nombre, minCalorias, maxCalorias);
-    }
+    public List<Receta> filtrar(@RequestParam(required = false) String nombre,
+            @RequestParam(required = false) Float minCalorias,
+            @RequestParam(required = false) Float maxCalorias) {
+return recetaService.filtrar(nombre, minCalorias, maxCalorias);
+}
 
 //    POST RECETA alta de recetas con ingrediente HU1 
     @PostMapping

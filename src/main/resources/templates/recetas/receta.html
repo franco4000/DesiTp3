@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Alta de Receta</title>
+	<link rel="stylesheet" th:href="@{/css/estilos.css}">
+
+</head>
+<body>
+    <h2>Registrar Nueva Receta</h2>
+	<p th:if="${error}" th:text="${error}" style="color:red;"></p>
+	<p th:if="${mensaje}" th:text="${mensaje}" style="color: green;"></p>
+
+    <form th:action="@{/recetas/guardar}" th:object="${receta}" method="post">
+
+        <label>Nombre:</label>
+        <input type="text" th:field="*{nombre}" required />
+        <div th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}">Error</div>
+
+        <label>Descripción:</label>
+        <textarea th:field="*{descripcion}" required></textarea>
+        <div th:if="${#fields.hasErrors('descripcion')}" th:errors="*{descripcion}">Error</div>
+
+		<div th:each="item, iterStat : *{items}">
+		    <h3>Ingrediente [[${iterStat.index + 1}]]</h3>
+
+		    <label>Ingrediente:</label>
+		    <select th:field="*{items[__${iterStat.index}__].ingrediente}">
+		        <option value="" disabled selected>-- Seleccionar --</option>
+		        <option th:each="ing : ${ingredientesDisponibles}"
+		                th:value="${ing.id}"
+		                th:text="${ing.nombre}">Ingrediente</option>
+		    </select>
+
+		    <label>Cantidad (kg):</label>
+		    <input type="number" step="0.01"
+		           th:field="*{items[__${iterStat.index}__].cantidad}" />
+
+		    <label>Calorías:</label>
+			<input type="number" step="1" min="0" 
+		           th:field="*{items[__${iterStat.index}__].calorias}" />
+
+		    <hr>
+		</div>
+        <br/>
+        <button type="submit">Guardar receta</button>
+    </form>
+
+    <br/>
+    <a th:href="@{/recetas}" class="boton">Volver al listado</a>
+</body>
+</html>
+
