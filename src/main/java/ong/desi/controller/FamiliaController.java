@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import ong.desi.entity.Familia;
+import ong.desi.exception.Excepcion;
 import ong.desi.service.FamiliaService;
 
 import java.util.List;
@@ -20,7 +21,7 @@ public class FamiliaController {
 
     // Crear nueva familia 
     @PostMapping
-    public ResponseEntity<Familia> crear(@RequestBody Familia familia) {//Como voluntario quiero dar de alta una familia al sistema...
+    public ResponseEntity<Familia> crear(@RequestBody Familia familia) throws Excepcion {//Como voluntario quiero dar de alta una familia al sistema...
         return ResponseEntity.ok(familiaService.crearFamilia(familia));
     }
 

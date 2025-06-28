@@ -16,6 +16,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import jakarta.validation.Valid;
 import ong.desi.entity.Familia;
+import ong.desi.exception.Excepcion;
 import ong.desi.service.FamiliaService;
 
 import java.util.List;
@@ -56,50 +57,56 @@ public class FamiliaViewController {
 
     @PostMapping("/guardar")
     public String guardar(@Valid @ModelAttribute("familiaForm") FamiliaForm form,
-                          BindingResult result, Model model, RedirectAttributes redirect,
-                          SessionStatus status) {
-
-    	System.out.println("Form recibido: " + form);
-      
-    	  if (result.hasErrors()) {
-    		  
-    	  System.out.println("Errores de validación: " + result.getAllErrors());
+                          BindingResult result, Model model,   @RequestParam String accion,
+                          SessionStatus status, RedirectAttributes redirectAttributes) {
+    	//agregar integrantes 
+    	if ("agregar".equals(accion)) {
+            form.getIntegrantes().add(new IntegranteForm());
+            model.addAttribute("familiaForm", form);
             return "familias/familia-form";
         }
 
-    	 try {
-   
-              if (form.getId() != null) {
-               //  edición buscamos la familia existente y actualizamos 
-            	  
-            Familia existente = familiaService.buscarPorId(form.getId());
-            if (existente != null) {
-                existente.setNombre(form.getNombre());
-                existente.setFechaAlta(form.getFechaAlta());
-               familiaService.actualizarFamilia(existente.getId(), existente);
-               redirect.addFlashAttribute("mensaje", "¡Familia editada con éxito!");
-            } else {
-               model.addAttribute("error", "La familia no existe.");
+    	//  Eliminar integrante 
+        if (accion.startsWith("eliminar_")) {
+        	int index = Integer.parseInt(accion.replace("eliminar_", ""));
+            if (index >= 0 && index < form.getIntegrantes().size()) {
+                form.getIntegrantes().remove(index);
+            }
+            model.addAttribute("familiaForm", form);
+            return "familias/familia-form";
+        }
+        
+       
+     //  Guardar familia
+        if ("guardar".equals(accion)) {
+
+            // Validaciones de formulario
+            if (result.hasErrors()) {
                 return "familias/familia-form";
             }
-        } else {
-            //  alta
-            Familia nueva = form.toEntidad();
-            familiaService.crearFamilia(nueva);
-            redirect.addFlashAttribute("mensaje", "¡Familia registrada con éxito!");
-        }
 
-              
-         status.setComplete();
-        return "redirect:/vista/familias";
-        
-     }catch (IllegalArgumentException ex) {
-         model.addAttribute("error", ex.getMessage());
-         model.addAttribute("familiaForm", form); 
-         return "familias/familia-form";
-     }
-    	 
-    }
+            try {
+                // Nueva familia
+                if (form.getId() == null) {
+                	  familiaService.crearFamilia(form.toEntidad());
+                } else {
+                    // Actualización de familia existente
+                	 familiaService.actualizarFamilia(form.getId(), form.toEntidad());
+                    }
+                status.setComplete(); // limpia el formulario de sesión
+                redirectAttributes.addFlashAttribute("mensaje", "Familia guardada con éxito");
+                return "redirect:/vista/familias";
+                }catch (Excepcion e) {
+                    result.rejectValue(e.getAtributo(), null, e.getMessage());
+                    return "familias/familia-form";
+                }
+            }
+
+            return "familias/familia-form";
+        }
+                
+
+           
     
     @GetMapping
     public String listarFamilias(Model model) {
@@ -134,6 +141,7 @@ public class FamiliaViewController {
             familiaService.actualizarFamilia(familia.getId(), familia);
         }
         return "redirect:/vista/familias";
+        
     }
     
 }
