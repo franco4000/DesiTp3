@@ -4,6 +4,7 @@ import ong.desi.controller.view.FamiliaForm;
 import ong.desi.controller.view.IntegranteForm;
 import ong.desi.entity.Familia;
 import ong.desi.entity.Integrante;
+import ong.desi.exception.Excepcion;
 import ong.desi.repository.FamiliaRepository;
 import ong.desi.repository.IntegranteRepository;
 import ong.desi.service.FamiliaService;
@@ -27,17 +28,17 @@ public class FamiliaServiceImpl implements FamiliaService {//implementa los mét
 	    private IntegranteRepository integranteRepository;
 
 	  @Override
-	  public Familia crearFamilia(Familia familia) {// validando datos y guardando tanto la familia como sus integrantes.
+	  public Familia crearFamilia(Familia familia) throws Excepcion {// validando datos y guardando tanto la familia como sus integrantes.
 	      // Validación básica del nombre
 	      if (familia.getNombre() == null || familia.getNombre().trim().isEmpty()) {
-	          throw new IllegalArgumentException("El nombre de la familia es requerido");
+	          throw new Excepcion("El nombre de la familia es requerido", "nombre");
 	      }
 
 	      // Validación de DNI duplicado
 	      if (familia.getIntegrantes() != null) {
 	          for (Integrante integrante : familia.getIntegrantes()) {
 	              if (integranteRepository.existsByDni(integrante.getDni())) {
-	                  throw new IllegalArgumentException("Ya existe un integrante con el DNI " + integrante.getDni());
+	                  throw new Excepcion("Ya existe un integrante con el DNI " + integrante.getDni(), "dni");
 	              }
 	          }
 	      }

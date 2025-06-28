@@ -73,42 +73,42 @@ public class FamiliaViewController {
                 form.getIntegrantes().remove(index);
             }
             model.addAttribute("familiaForm", form);
+
             return "familias/familia-form";
         }
 
-    	 try {
-   
-              if (form.getId() != null) {
-               //  edición buscamos la familia existente y actualizamos 
-            	  
-            Familia existente = familiaService.buscarPorId(form.getId());
-            if (existente != null) {
-                existente.setNombre(form.getNombre());
-                existente.setFechaAlta(form.getFechaAlta());
-               familiaService.actualizarFamilia(existente.getId(), existente);
-               redirectAttributes.addFlashAttribute("mensaje", "¡Familia editada con éxito!");
-            } else {
-               model.addAttribute("error", "La familia no existe.");
-                return "familias/familia-form";
-            }
-        } else {
-            //  alta
-            Familia nueva = form.toEntidad();
-            familiaService.crearFamilia(nueva);
-            redirectAttributes.addFlashAttribute("mensaje", "¡Familia registrada con éxito!");
+     // Validación
+        if (result.hasErrors()) {
+            return "familias/familia-form";
         }
 
-              
-         status.setComplete();
-        return "redirect:/vista/familias";
-        
-     }catch (IllegalArgumentException ex) {
-         model.addAttribute("error", ex.getMessage());
-         model.addAttribute("familiaForm", form); 
-         return "familias/familia-form";
-     }
-    	 
-    }
+        try {
+            if (form.getId() != null) {
+                Familia existente = familiaService.buscarPorId(form.getId());
+                if (existente != null) {
+                    existente.setNombre(form.getNombre());
+                    existente.setFechaAlta(form.getFechaAlta());
+                    familiaService.actualizarFamilia(existente.getId(), existente);
+                    redirectAttributes.addFlashAttribute("mensaje", "¡Familia editada con éxito!");
+                } else {
+                    model.addAttribute("error", "La familia no existe.");
+                    return "familias/familia-form";
+                }
+            } else {
+                Familia nueva = form.toEntidad();
+                familiaService.crearFamilia(nueva);
+                redirectAttributes.addFlashAttribute("mensaje", "¡Familia registrada con éxito!");
+            }
+
+            status.setComplete();
+            return "redirect:/vista/familias";
+
+        } catch (Excepcion e) {
+            result.rejectValue(e.getAtributo(), null, e.getMessage());
+            return "familias/familia-form";
+        }
+    }    	 
+           
     
     @GetMapping
     public String listarFamilias(Model model) {
@@ -143,6 +143,7 @@ public class FamiliaViewController {
             familiaService.actualizarFamilia(familia.getId(), familia);
         }
         return "redirect:/vista/familias";
+        
     }
     
 }

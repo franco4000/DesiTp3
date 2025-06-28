@@ -55,7 +55,7 @@ public class RecetaViewController {
             recetaService.crearReceta(receta);
             return "redirect:/recetas/exito";
         } catch (Excepcion e) {
-            model.addAttribute("error", e.getMensaje());
+            model.addAttribute("error", e.getMessage());
             model.addAttribute("ingredientesDisponibles", ingredienteRepository.findAll());
             redirectAttrs.addFlashAttribute("mensaje", "¡Receta guardada exitosamente!");
             return "redirect:/recetas";

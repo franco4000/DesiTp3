@@ -2,6 +2,8 @@ package ong.desi.service;
 
 import ong.desi.controller.view.FamiliaForm;
 import ong.desi.entity.Familia;
+import ong.desi.exception.Excepcion;
+
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -10,8 +12,7 @@ import org.springframework.stereotype.Service;
 public interface FamiliaService {
     
 
-	    Familia crearFamilia(Familia familia);
-	    
+	    Familia crearFamilia(Familia familia) throws Excepcion;
 	    Familia actualizarFamilia(Long id, Familia familiaActualizada);
 	   
 	    List<Familia> buscarPorNombre(String nombre);
@@ -23,6 +24,8 @@ public interface FamiliaService {
 
 	    int contarIntegrantesActivos(Long familiaId);
 	    FamiliaForm convertirAFamiliaForm(Familia familia);
+	    
+
 
 	}
 

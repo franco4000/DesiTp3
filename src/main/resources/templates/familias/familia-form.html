@@ -19,11 +19,15 @@
 	<div th:if="${mensaje}" class="alert-success" role="alert">
 	    <p th:text="${mensaje}"></p>
 	</div>
+	<div th:if="${errorGeneral}" class="alert alert-danger" role="alert">
+	    <p th:text="${errorGeneral}"></p>
+	</div>
 
 
 	<!-- formulario de la familia --> 
     <form th:action="@{/vista/familias/guardar}" th:object="${familiaForm}" method="post">
 		<input type="hidden" th:field="*{id}" />
+		<input type="hidden" name="accion" id="accion" />
 		
 		<div>
         <label for="nombre">Nombre de la familia:</label>
@@ -74,15 +78,22 @@
 		                    th:value="${op}" th:text="${op}"></option>
 		        </select>
 
-				<!-- BOTÓN PARA ELIMINAR ESTE INTEGRANTE -->
+				<!-- BOTÓN PARA ELIMINAR ESTE INTEGRANTE 
 				<form th:action="@{/vista/familias/familia/form/eliminarIntegrante}" method="post" th:object="${familiaForm}" style="display:inline">
 				    <input type="hidden" name="indice" th:value="${iterStat.index}" />
 				    <input type="hidden" th:field="*{id}" />
 				    <button type="submit" name="action" value="eliminar"
 				            th:formaction="@{/vista/familias/familia/form/eliminarIntegrante}"
 				            class="btn-eliminar">Eliminar Integrante</button>
-				</form>
-
+				</form>-->
+				
+				<button type="submit"
+				        name="accion"
+						th:value="'eliminar_' + ${iterStat.index}"
+				        formaction="/vista/familias/familia/form/eliminarIntegrante"
+				        class="btn-eliminar">
+				    Eliminar Integrante
+				            </button>
 				            </fieldset>
 				            <hr/>
 				        </div>
@@ -96,7 +107,8 @@
 				    <!-- FORMULARIO PARA AGREGAR INTEGRANTE -->
 				    <form th:action="@{/vista/familias/familia/form/agregarIntegrante}" method="post" th:object="${familiaForm}">
 				        <input type="hidden" th:field="*{id}" />
-				        <button type="submit" class="btn-agregar">Agregar integrante</button>
+						<button type="submit" class="btn-agregar" name="accion" value="agregar">Agregar integrante</button>
+				      
 				    </form>
 
 				    <!-- BOTÓN PARA VOLVER AL LISTADO -->

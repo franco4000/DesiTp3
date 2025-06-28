@@ -18,25 +18,25 @@ public class ItemReceta {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "ingrediente_id", nullable = false)
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "ingrediente_id")
     private Ingrediente ingrediente;
 
     @NotNull(message = "La cantidad es obligatoria")
     @Positive(message = "La cantidad debe ser mayor a 0")
     @Column(nullable = false)
-    private Float cantidad; // en kg
+    private Float cantidad;
 
     @NotNull(message = "Las calorías son obligatorias")
     @PositiveOrZero(message = "Las calorías deben ser 0 o más")
     @Column(nullable = false)
     private Integer calorias;
-    
-    @Column(nullable = false)
-    private boolean activo = true; // para eliminación lógica
 
-    @ManyToOne
-    @JoinColumn(name = "receta_id",  nullable = false)
+    @Column(nullable = false)
+    private boolean activa = true;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "receta_id")
     private Receta receta;
 
     @Transient                     
@@ -51,50 +51,48 @@ public class ItemReceta {
 		return id;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
-	}
 
-	public Ingrediente getIngrediente() {
-		return ingrediente;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public void setIngrediente(Ingrediente ingrediente) {
-		this.ingrediente = ingrediente;
-	}
+    public Ingrediente getIngrediente() {
+        return ingrediente;
+    }
 
-	public Float getCantidad() {
-		return cantidad;
-	}
+    public void setIngrediente(Ingrediente ingrediente) {
+        this.ingrediente = ingrediente;
+    }
 
-	public void setCantidad(Float cantidad) {
-		this.cantidad = cantidad;
-	}
+    public Float getCantidad() {
+        return cantidad;
+    }
 
-	public Integer getCalorias() {
-		return calorias;
-	}
+    public void setCantidad(Float cantidad) {
+        this.cantidad = cantidad;
+    }
 
-	public void setCalorias(Integer calorias) {
-		this.calorias = calorias;
-	}
+    public Integer getCalorias() {
+        return calorias;
+    }
 
-	public boolean isActivo() {
-		return activo;
-	}
+    public void setCalorias(Integer calorias) {
+        this.calorias = calorias;
+    }
 
-	public void setActivo(boolean activo) {
-		this.activo = activo;
-	}
+    public boolean isActiva() {
+        return activa;
+    }
 
-	public Receta getReceta() {
-		return receta;
-	}
+    public void setActiva(boolean activa) {
+        this.activa = activa;
+    }
 
-	public void setReceta(Receta receta) {
-		this.receta = receta;
-	}
+    public Receta getReceta() {
+        return receta;
+    }
 
-
-   
+    public void setReceta(Receta receta) {
+        this.receta = receta;
+    }
 }

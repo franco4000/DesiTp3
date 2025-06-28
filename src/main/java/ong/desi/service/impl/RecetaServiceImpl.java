@@ -100,7 +100,7 @@ public class RecetaServiceImpl implements RecetaService {
         receta.setDescripcion(datosActualizados.getDescripcion());
 //marca los items antiguos como inactivos
         for (ItemReceta item : receta.getItems()) {
-            item.setActivo(false); // la eliminacion de receta 
+            item.setActiva(false); // la eliminacion de receta 
             
         }
 
@@ -136,7 +136,7 @@ public class RecetaServiceImpl implements RecetaService {
 
     public int calcularCaloriasTotales(Receta receta) {
         return receta.getItems().stream()
-        		.filter(ItemReceta::isActivo) // Solo ítems activos
+        		.filter(ItemReceta::isActiva) // Solo ítems activos
                 .mapToInt(ItemReceta::getCalorias)
                 .sum();
     }
