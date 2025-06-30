@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Registrar Preparación</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <div class="container">
+        <h1>Registrar Nueva Preparación</h1>
+        
+        <form th:action="@{/preparaciones/guardar}" th:object="${preparacion}" method="post">
+            
+            <div>
+                <label for="receta">Seleccionar Receta:</label>
+                <select id="receta" th:field="*{receta}" required>
+                    <option value="">-- Seleccionar una receta --</option>
+                    <option th:each="rec : ${recetasDisponibles}"
+                            th:value="${rec.id}"
+                            th:text="${rec.nombre}"></option>
+                </select>
+            </div>
+            
+            <div>
+                <label for="cantidad">Cantidad de Raciones:</label>
+                <input type="number" id="cantidad" th:field="*{cantidadRaciones}" min="1" required/>
+            </div>
+            
+            <div>
+                <label for="fecha">Fecha de Preparación:</label>
+                <input type="date" id="fecha" th:field="*{fechaPreparacion}" required/>
+            </div>
+            
+            <br/>
+            <button type="submit" class="btn-guardar">Guardar Preparación</button>
+        </form>
+        
+        <br/>
+        <a th:href="@{/preparaciones}" class="btn-volver-formulario">Volver al Listado</a>
+    </div>
+</body>
+</html>

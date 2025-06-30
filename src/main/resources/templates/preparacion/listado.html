@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Listado de Preparaciones</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <div class="container">
+        <h1>Listado de Preparaciones Realizadas</h1>
+        
+        <br/><br/>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Fecha de Preparación</th>
+                    <th>Receta Preparada</th>
+                    <th>Cantidad de Raciones</th>
+                    </tr>
+            </thead>
+            <tbody>
+                <tr th:each="prep : ${listaPreparaciones}">
+                    <td th:text="${prep.id}">1</td>
+                    <td th:text="${prep.fechaPreparacion}">2025-06-29</td>
+                    <td th:text="${prep.receta.nombre}">Pan Casero</td>
+                    <td th:text="${prep.cantidadRaciones}">5</td>
+                    </tr>
+            </tbody>
+        </table>
+        
+        <br/>
+        
+        <a th:href="@{/}" class="btn-volver-formulario">Volver al Inicio</a>
+    </div>
+</body>
+</html>
