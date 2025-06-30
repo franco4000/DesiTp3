@@ -9,6 +9,8 @@
     <div class="container">
         <h1>Listado de Preparaciones Realizadas</h1>
         
+        <a th:href="@{/preparaciones/nueva}" class="btn-agregar">Nueva Preparación</a>
+        
         <br/><br/>
         
         <table>
@@ -18,15 +20,20 @@
                     <th>Fecha de Preparación</th>
                     <th>Receta Preparada</th>
                     <th>Cantidad de Raciones</th>
-                    </tr>
+                    <th>Acciones</th> </tr>
             </thead>
             <tbody>
                 <tr th:each="prep : ${listaPreparaciones}">
-                    <td th:text="${prep.id}">1</td>
-                    <td th:text="${prep.fechaPreparacion}">2025-06-29</td>
-                    <td th:text="${prep.receta.nombre}">Pan Casero</td>
-                    <td th:text="${prep.cantidadRaciones}">5</td>
-                    </tr>
+                    <td th:text="${prep.id}"></td>
+                    <td th:text="${prep.fechaPreparacion}"></td>
+                    <td th:text="${prep.receta.nombre}"></td>
+                    <td th:text="${prep.cantidadRaciones}"></td>
+                    <td>
+                        <form th:action="@{/preparaciones/eliminar/{id}(id=${prep.id})}" method="post" style="display:inline;">
+                            <button type="submit" class="btn-eliminar" onclick="return confirm('¿Estás seguro de que deseas eliminar esta preparación?');">Eliminar</button>
+                        </form>
+                        </td>
+                </tr>
             </tbody>
         </table>
         

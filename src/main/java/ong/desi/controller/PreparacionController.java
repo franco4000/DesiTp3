@@ -62,6 +62,13 @@ public class PreparacionController {
         preparacionService.registrarPreparacion(preparacion);
         return "redirect:/preparaciones"; // Redirige al listado
     }
+    
+ // MÉTODO PARA PROCESAR LA BAJA LÓGICA DESDE EL BOTÓN
+    @PostMapping("/eliminar/{id}")
+    public String eliminarPreparacion(@PathVariable Long id) {
+        preparacionService.eliminarPreparacion(id); // Reutilizamos el servicio que ya existe
+        return "redirect:/preparaciones"; // Volvemos al listado actualizado
+    }
 
 
     // - MÉTODOS PARA LA API (JSON) - Los que ya tenía, ahora en una sub-ruta /api -
