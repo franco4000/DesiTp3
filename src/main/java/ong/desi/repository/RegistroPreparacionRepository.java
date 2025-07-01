@@ -10,7 +10,10 @@ import ong.desi.entity.Receta;
 import ong.desi.entity.RegistroPreparacion;
 @Repository
 public interface RegistroPreparacionRepository extends JpaRepository<RegistroPreparacion, Long> {
+	
 
 	 List<RegistroPreparacion> findByReceta(Receta receta);
+	 
+	
 }
 

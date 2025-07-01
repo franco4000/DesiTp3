@@ -7,7 +7,8 @@
 </head>
 <body>
     <div class="container">
-        <h1>Registrar Nueva Preparación</h1>
+		<h1 th:if="*{id == null}">Registrar Nueva Preparación</h1>
+		<h1 th:if="*{id != null}">Editar Preparación</h1>
         
         <form th:action="@{/preparaciones/guardar}" th:object="${preparacion}" method="post">
             
@@ -30,10 +31,15 @@
                 <label for="fecha">Fecha de Preparación:</label>
                 <input type="date" id="fecha" th:field="*{fechaPreparacion}" required/>
             </div>
-            
+			
+			<input type="hidden" th:field="*{id}" />
+			
             <br/>
             <button type="submit" class="btn-guardar">Guardar Preparación</button>
+			
         </form>
+		
+		
         
         <br/>
         <a th:href="@{/preparaciones}" class="btn-volver-formulario">Volver al Listado</a>

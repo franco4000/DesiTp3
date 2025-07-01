@@ -32,23 +32,25 @@ public class PreparacionServiceImpl implements PreparacionService {
     @Transactional // Anotación clave: si algo falla, toda la operación se deshace (no se descuenta stock a medias)
     public Preparacion registrarPreparacion(Preparacion preparacion) {
         
-        //  1 OBTENER DATOS Y VALIDAR 
-        
-        // Buscamos la receta en la base de datos usando el ID que viene en la preparación
-        Receta receta = recetaRepository.findById(preparacion.getReceta().getId())
-                .orElseThrow(() -> new RuntimeException("La receta especificada no existe."));
+    	// - 1 OBTENER DATOS Y VALIDAR -
 
-        // Validamos que la fecha de preparación no sea en el futuro
-        if (preparacion.getFechaPreparacion().isAfter(LocalDate.now())) {
-            throw new RuntimeException("La fecha de preparación no puede ser futura.");
-        }
+    	// Busca la receta en la base de datos usando el ID que viene en la preparación
+    	Receta receta = recetaRepository.findById(preparacion.getReceta().getId())
+    	        .orElseThrow(() -> new RuntimeException("La receta especificada no existe."));
+
+    	// Valida que la fecha de preparación no sea en el futuro
+    	if (preparacion.getFechaPreparacion().isAfter(LocalDate.now())) {
+    	    throw new RuntimeException("La fecha de preparación no puede ser futura.");
+    	}
+
+    	// -Nva VALIDACIÓN-
+    	// Usamos el nuevo método del repositorio para verificar si ya existe una preparación
+    	// para esa receta en esa fecha.
+    	if (preparacionRepository.existsByRecetaAndFechaPreparacion(receta, preparacion.getFechaPreparacion())) {
+    	    throw new RuntimeException("Ya se registró una preparación para la receta '" + receta.getNombre() + "' en esta fecha.");
+    	}
         
-        // (Opcional, pero en los requisitos) Validar que no se prepare la misma receta dos veces el mismo día.
-        // Se necesitaría un método en el PreparacionRepository como:
-        // boolean existsByRecetaAndFechaPreparacion(Receta receta, LocalDate fecha);
-        
-        
-        // 2. LÓGICA DE NEGOCIO: VERIFICAR Y DESCONTAR STOCK 
+        // 2. LÓGICA DE NEGOCIO, VERIFICAR Y DESCONTAR STOCK 
 
         // Recorremos cada "renglón" (ItemReceta) de la receta para verificar el stock
         for (ItemReceta item : receta.getItems()) {
@@ -85,7 +87,7 @@ public class PreparacionServiceImpl implements PreparacionService {
             }
         }
 
-        // 3. GUARDAR LA NUEVA PREPARACIÓN 
+        // 3 GUARDAR LA NUEVA PREPARACIÓN 
        
         preparacion.setActiva(true); // Nos aseguramos de que se cree como activa
         preparacion.setReceta(receta); // Asignamos el objeto Receta completo
@@ -122,5 +124,11 @@ public class PreparacionServiceImpl implements PreparacionService {
         preparacion.setActiva(false);
         
         preparacionRepository.save(preparacion);
+    }
+    
+    @Override
+    public Preparacion buscarPorId(Long id) {
+        return preparacionRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Preparación no encontrada"));
     }
 }

@@ -12,4 +12,6 @@ public interface PreparacionService {
     Preparacion modificarFechaPreparacion(Long id, Preparacion preparacionActualizada);
 
     void eliminarPreparacion(Long id);
+    
+    Preparacion buscarPorId(Long id);
 }

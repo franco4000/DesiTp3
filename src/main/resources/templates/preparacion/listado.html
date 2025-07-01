@@ -13,29 +13,32 @@
         
         <br/><br/>
         
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Fecha de Preparación</th>
-                    <th>Receta Preparada</th>
-                    <th>Cantidad de Raciones</th>
-                    <th>Acciones</th> </tr>
-            </thead>
-            <tbody>
-                <tr th:each="prep : ${listaPreparaciones}">
-                    <td th:text="${prep.id}"></td>
-                    <td th:text="${prep.fechaPreparacion}"></td>
-                    <td th:text="${prep.receta.nombre}"></td>
-                    <td th:text="${prep.cantidadRaciones}"></td>
-                    <td>
-                        <form th:action="@{/preparaciones/eliminar/{id}(id=${prep.id})}" method="post" style="display:inline;">
-                            <button type="submit" class="btn-eliminar" onclick="return confirm('¿Estás seguro de que deseas eliminar esta preparación?');">Eliminar</button>
-                        </form>
-                        </td>
-                </tr>
-            </tbody>
-        </table>
+		<table>
+		    <thead>
+		        <tr>
+		            <th>ID</th>
+		            <th>Fecha de Preparación</th>
+		            <th>Receta Preparada</th>
+		            <th>Cantidad de Raciones</th>
+		            <th>Acciones</th> </tr>
+		    </thead>
+		    <tbody>
+		        <tr th:each="prep : ${listaPreparaciones}">
+		            <td th:text="${prep.id}"></td>
+		            <td th:text="${prep.fechaPreparacion}"></td>
+		            <td th:text="${prep.receta.nombre}"></td>
+		            <td th:text="${prep.cantidadRaciones}"></td>
+		            
+		            <td>
+		                <a th:href="@{/preparaciones/editar/{id}(id=${prep.id})}" class="btn-editar">Editar</a>
+		                
+		                <form th:action="@{/preparaciones/eliminar/{id}(id=${prep.id})}" method="post" style="display:inline;">
+		                    <button type="submit" class="btn-eliminar" onclick="return confirm('¿Estás seguro de que deseas eliminar esta preparación?');">Eliminar</button>
+		                </form>
+		            </td>
+		        </tr>
+		    </tbody>
+		</table>
         
         <br/>
         
