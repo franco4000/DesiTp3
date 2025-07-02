@@ -2,6 +2,7 @@ package ong.desi.service.impl;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -62,6 +63,7 @@ public class RecetaServiceImpl implements RecetaService {
 
         /* 2) Resolver cada ItemReceta */
         for (ItemReceta item : receta.getItems()) {
+        	item.setActiva(true);
             Ingrediente ing = item.getIngrediente();
             if (ing == null || ing.getId() == null) {
                 throw new Excepcion("Ingrediente o su id es nulo en item");
@@ -136,7 +138,7 @@ public class RecetaServiceImpl implements RecetaService {
 
     public int calcularCaloriasTotales(Receta receta) {
         return receta.getItems().stream()
-        		.filter(ItemReceta::isActiva) // Solo ítems activos
+        		.filter(ItemReceta::getActiva) 
                 .mapToInt(ItemReceta::getCalorias)
                 .sum();
     }
@@ -175,7 +177,7 @@ public class RecetaServiceImpl implements RecetaService {
 
             Producto producto = (Producto) ingrediente;
             producto.descontarStock(item.getCantidad());
-            productoRepository.save(producto); // Asegurate de tener el repo
+            productoRepository.save(producto); 
        
         }
         registroPreparacionRepository.save(new RegistroPreparacion(receta, 1));
@@ -184,7 +186,7 @@ public class RecetaServiceImpl implements RecetaService {
     @Override
     public List<Receta> filtrar(String nombre, Float minCalorias, Float maxCalorias) {
         return listarRecetas().stream()
-            .filter(r -> nombre == null || r.getNombre().toLowerCase().contains(nombre.toLowerCase()))
+            .filter(r -> nombre == null || nombre.isBlank() || r.getNombre().toLowerCase().contains(nombre.toLowerCase()))
             .filter(r -> {
                 int calorias = calcularCaloriasTotales(r);
                 return (minCalorias == null || calorias >= minCalorias)
@@ -192,6 +194,7 @@ public class RecetaServiceImpl implements RecetaService {
             })
             .toList();
     }
+
 
     public List<Receta> filtrarPorNombre(String nombre) {
         return listarRecetas().stream()
@@ -257,8 +260,9 @@ public class RecetaServiceImpl implements RecetaService {
 
 	@Override
 	public Object obtenerIngredientesActivos() {
-		// TODO Auto-generated method stub
-		return null;
+		return ingredienteRepository.findAll().stream()
+		        .filter(i -> i.getActivo() == null || i.getActivo())
+		        .collect(Collectors.toList());
 	}
 
 	public void actualizarIngrediente(IngredienteForm form) {
@@ -271,7 +275,7 @@ public class RecetaServiceImpl implements RecetaService {
 	        ingredienteRepository.delete(ingrediente);
 
 	        Producto nuevo = new Producto();
-	        nuevo.setId(form.getId()); // importante para mantener la relación si hay claves externas
+	        nuevo.setId(form.getId()); 
 	        nuevo.setNombre(form.getNombre());
 	        nuevo.setCalorias(form.getCalorias());
 	        nuevo.setEstacion(form.getEstacion());

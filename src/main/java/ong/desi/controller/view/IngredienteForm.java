@@ -26,7 +26,7 @@ public class IngredienteForm {
    @Positive (message = "El precio debe ser mayor a 0")
    private Float precioActual;
 
-   @NotNull(message = "El ID del ingrediente es obligatorio para editar")
+ 
    private Long id;
    public IngredienteForm() {
 	}

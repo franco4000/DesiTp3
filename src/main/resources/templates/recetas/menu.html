@@ -1,15 +1,16 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-    <body>
-        <!-- fragmento “navbar” -->
-        <div th:fragment="navbar">
-            <nav>
-                <a th:href="@{/}">Inicio</a> |
-                <a th:href="@{/recetas/nueva}">Nueva Receta</a> |
-                <a th:href="@{/ingredientes/nuevo}">Nuevo Ingrediente</a> |
-                <a th:href="@{/recetas}">Listado de Recetas</a>
-            </nav>
-            <hr/>
-        </div>
-    </body>
+<body>
+    <div th:fragment="navbar">
+        <nav style="background-color: #2e8b57; padding: 10px; border-radius: 5px; color: white;">
+            <a th:href="@{/menu}" style="color: white; font-weight: bold; margin-right: 10px;">Inicio</a> 
+            <a th:href="@{/recetas/nueva}" style="color: white; margin-right: 10px;"> Receta</a> 
+            <a th:href="@{/vista/familias}" style="color: white; margin-right: 10px;">Familias</a> 
+            <a th:href="@{/preparaciones}" style="color: white; margin-right: 10px;">Preparaciones</a> 
+            <a th:href="@{/entrega}" style="color: white;">Entrega de Alimentos</a>
+        </nav>
+        <hr/>
+    </div>
+</body>
 </html>
+

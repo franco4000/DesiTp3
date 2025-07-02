@@ -70,4 +70,41 @@ hr {
     border-top: 1px solid #ccc;
     margin: 15px 0;
 }
-
+.menu-principal {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    max-width: 500px;
+    margin: 0 auto;
+}
+.inactivo {
+            color: gray;
+            text-decoration: line-through;
+        }
+        /* Opcional: estilos para botones */
+        .btn {
+            background-color: #2e8b57;
+            color: white;
+            padding: 5px 10px;
+            text-decoration: none;
+            border-radius: 3px;
+            font-weight: bold;
+            margin-right: 5px;
+        }
+        .btn:hover {
+            background-color: #246c45;
+        }
+        .btn-danger {
+            background-color: #dc3545;
+        }
+        .btn-danger:hover {
+            background-color: #b02a37;
+        }
+        .btn-warning {
+            background-color: #ffc107;
+            color: black;
+        }
+        .btn-warning:hover {
+            background-color: #e0a800;
+        }

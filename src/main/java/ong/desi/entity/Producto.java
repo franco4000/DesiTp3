@@ -30,9 +30,10 @@ public class Producto extends Ingrediente {
             Float precioActual,
             Estacion estacion) {
 
-     super(nombre, calorias, estacion);   //  si el campo está en la superclase Ingrediente
+        //  si el campo está en la superclase Ingrediente
      this.stockDisponible = stockDisponible;
      this.precioActual    = precioActual;
+    
 }
 
 
@@ -56,5 +57,8 @@ public class Producto extends Ingrediente {
 	    this.stockDisponible -= cantidad;
 	}
 
-    
+	@Override
+    public TipoIngrediente getTipo() {
+        return TipoIngrediente.PRODUCTO;
+    }
 }

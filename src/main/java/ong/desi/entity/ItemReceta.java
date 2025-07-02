@@ -33,7 +33,7 @@ public class ItemReceta {
     private Integer calorias;
 
     @Column(nullable = false)
-    private boolean activa = true;
+    private Boolean activa = true;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "receta_id")
@@ -80,7 +80,7 @@ public class ItemReceta {
         this.calorias = calorias;
     }
 
-    public boolean isActiva() {
+    public Boolean getActiva() {
         return activa;
     }
 

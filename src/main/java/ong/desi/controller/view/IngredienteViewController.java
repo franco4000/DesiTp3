@@ -2,6 +2,7 @@ package ong.desi.controller.view;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -90,8 +91,13 @@ public class IngredienteViewController {
     @GetMapping("/listado")
     public String listado(Model model) {
         model.addAttribute("ingredientes", recetaService.obtenerIngredientesActivos());
+        model.addAttribute("estaciones", Estacion.values());
+        model.addAttribute("tipos", TipoIngrediente.values());
+        // Agrege param vacío para evitar null
+        model.addAttribute("param", Map.of("nombre", "", "estacion", "", "tipo", ""));
         return "ingredientes/listado";
     }
+
 
     @GetMapping("/editar/{id}")
     public String editarIngrediente(@PathVariable Long id, Model model) {
@@ -114,6 +120,12 @@ public class IngredienteViewController {
         attr.addFlashAttribute("mensaje", "Ingrediente dado de baja");
 
         return "redirect:/ingredientes/listado";
+    }
+    public List<Ingrediente> obtenerIngredientesActivos() {
+        return ingredienteRepository.findAll()
+            .stream()
+            .filter(i -> i.getActivo() == null || i.getActivo()) // solo los activos
+            .collect(Collectors.toList());
     }
 
 }

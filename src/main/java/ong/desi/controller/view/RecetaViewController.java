@@ -29,6 +29,10 @@ public class RecetaViewController {
 
     @Autowired RecetaService recetaService;
     @Autowired IngredienteRepository ingredienteRepository;
+    @ModelAttribute("recetaService")
+    public RecetaService getRecetaService() {
+        return recetaService;
+    }
 
     /* -------- Alta ---------- */
     @GetMapping("/nueva")
@@ -49,17 +53,25 @@ public class RecetaViewController {
             model.addAttribute("ingredientesDisponibles", ingredienteRepository.findAll());
             return "recetas/receta";
         }
+    	
 
         try {
-            receta.getItems().forEach(it -> it.setReceta(receta));
-            recetaService.crearReceta(receta);
-            return "redirect:/recetas/exito";
+        	
+        	for (ItemReceta item : receta.getItems()) {
+        	    if (item.getIngredienteId() != null) {
+        	        Ingrediente ing = ingredienteRepository.findById(item.getIngredienteId())
+        	            .orElseThrow(() -> new Excepcion("Ingrediente no encontrado"));
+        	        item.setIngrediente(ing);
+        	        item.setReceta(receta);
+        	    }
+        	}
+        	recetaService.crearReceta(receta);
+            redirectAttrs.addFlashAttribute("exito", "¡Receta guardada exitosamente!");
+            return "redirect:/recetas";
         } catch (Excepcion e) {
             model.addAttribute("error", e.getMessage());
             model.addAttribute("ingredientesDisponibles", ingredienteRepository.findAll());
-            redirectAttrs.addFlashAttribute("mensaje", "¡Receta guardada exitosamente!");
-            return "redirect:/recetas";
-
+            return "recetas/receta";
          
         }
         
@@ -71,7 +83,7 @@ public class RecetaViewController {
         return "exito";
     }
     /* -------- Listado (+ filtros) ---------- */
-    @GetMapping
+    @GetMapping("")
     public String listar(@RequestParam(required = false) String nombre,
                          @RequestParam(required = false) Float minCalorias,
                          @RequestParam(required = false) Float maxCalorias,

@@ -6,6 +6,9 @@
 </head>
 <body>
     <h2>Listado de Recetas</h2>
+	<div th:if="${exito}" class="alert alert-success" th:text="${exito}"></div>
+	<div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
 
     <!-- FORMULARIO DE FILTRO -->
     <form method="get" th:action="@{/recetas}">
@@ -22,30 +25,30 @@
     </form>
 
     <!-- SOLO MUESTRO LA TABLA SI recetas NO ES NULL -->
-    <div th:if="${recetas != null}">
-        <table th:if="${!recetas.empty}">
-            <thead>
-                <tr>
-                    <th>Nombre</th>
-                    <th>Calorías Totales</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="receta : ${recetas}">
-                    <td th:text="${receta.nombre}"></td>
-                    <td th:text="${#numbers.sum(receta.items.![calorias])?: 0 }"></td>
-                    <td>
-                        <a th:href="@{'/recetas/editar/' + ${receta.id}}">Modificar</a> |
-                        <a th:href="@{'/recetas/eliminar/' + ${receta.id}}">Eliminar</a>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+	<table th:if="${not #lists.isEmpty(recetas)}">
+	    <thead>
+	        <tr>
+	            <th>Nombre</th>
+	            <th>Calorías Totales</th>
+	            <th>Acciones</th>
+	        </tr>
+	    </thead>
+	    <tbody>
+	        <tr th:each="receta : ${recetas}">
+	            <td th:text="${receta.nombre}">Nombre</td>
+	            <td th:text="${receta.caloriasTotales}">0</td>
+	            <td>
+	                <a th:href="@{'/recetas/editar/' + ${receta.id}}" class="btn btn-warning">Editar</a>
+	                <a th:href="@{'/recetas/eliminar/' + ${receta.id}}" class="btn btn-danger" onclick="return confirm('¿Estás seguro de que querés eliminar esta receta?');">Eliminar</a>
+	            </td>
+	        </tr>
+	    </tbody>
+	</table>
+
 
         <!-- Muestra mensaje solo si ya se buscó y no hubo resultados -->
-        <p th:if="${recetas.empty}">
-            <em>No hay recetas que coincidan</em>
+		<p th:if="${#lists.isEmpty(recetas)}">   
+		 <em>No hay recetas que coincidan</em>
         </p>
     </div>
 

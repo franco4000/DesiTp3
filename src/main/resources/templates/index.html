@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Menú Principal</title>
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head>
+<body>
+
+<!-- Navbar -->
+<div th:replace="recetas/menu :: navbar"></div>
+
+<div class="menu-principal" style="text-align: center;">
+    <h1>Menú Principal</h1>
+
+    <!-- Botones en vez de links normales -->
+    <a th:href="@{/vista/familias}" class="boton">Gestión de Familias</a>
+    <a th:href="@{/menu}" class="boton">Gestión de Recetas</a>
+    <a th:href="@{/preparaciones}" class="boton">Gestión de Preparación</a>
+    <a th:href="@{/entrega}" class="boton">Gestión de Entrega de Alimentos</a>
+</div>
+
+</body>
+</html>

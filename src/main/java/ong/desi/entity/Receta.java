@@ -27,19 +27,55 @@ public class Receta {
     private List<ItemReceta> items = new ArrayList<>();
 
     @Column(nullable = false)
-    private boolean activa = true;
+    private Boolean activa = true;
 
-    // Getters, setters y constructores...
-    public Receta() {}
-    public Receta(String nombre, String descripcion) { this.nombre = nombre; this.descripcion = descripcion; }
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-    public String getNombre() { return nombre; }
-    public void setNombre(String nombre) { this.nombre = nombre; }
-    public String getDescripcion() { return descripcion; }
-    public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
-    public List<ItemReceta> getItems() { return items; }
-    public void setItems(List<ItemReceta> items) { this.items = items; }
-    public boolean isActiva() { return activa; }
-    public void setActiva(boolean activa) { this.activa = activa; }
+
+    public Receta() {
+    	
+    }
+    public Receta(String nombre, String descripcion) {
+    	this.nombre = nombre;
+    	this.descripcion = descripcion;
+    	}
+    public Long getId() {
+    	return id; 
+    	}
+    public void setId(Long id) {
+    	this.id = id;
+    	}
+    public String getNombre() {
+    	return nombre;
+    	}
+    public void setNombre(String nombre) { 
+    	this.nombre = nombre; 
+    	}
+    public String getDescripcion() { 
+    	return descripcion; 
+    	}
+    public void setDescripcion(String descripcion) { 
+    	this.descripcion = descripcion; 
+    	}
+    public List<ItemReceta> getItems() {
+    	return items; 
+    	}
+    public void setItems(List<ItemReceta> items) {
+    	this.items = items;
+    	}
+    public Boolean getActiva() {
+    	return activa; 
+    	}
+    public void setActiva(boolean activa) { 
+    	this.activa = activa; 
+    	}
+    @Transient
+    public Integer getCaloriasTotales() {
+        if (items == null) return 0;
+
+        return items.stream()
+            .filter(i -> i.getActiva() == null || i.getActiva()) // ahora sí compila
+            .mapToInt(ItemReceta::getCalorias)
+            .sum();
+    }
+
+
 }

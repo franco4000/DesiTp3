@@ -17,7 +17,10 @@ public class Condimento extends Ingrediente{
                       Float calorias,
                       Estacion estacion) {
         super(nombre, calorias, estacion);   // ← asigna nombre y estación en la superclase
-        
+      
     }
-
+    @Override
+    public TipoIngrediente getTipo() {
+        return TipoIngrediente.CONDIMENTO;
+    }
 }

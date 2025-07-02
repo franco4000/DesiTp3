@@ -23,7 +23,7 @@ public class SecurityConfig {
             )
             .formLogin(form -> form
                 .loginPage("/login")
-                .defaultSuccessUrl("/vista/familias", true)
+                .defaultSuccessUrl("/index", true)
                 .permitAll()
             )
             .logout(logout -> logout

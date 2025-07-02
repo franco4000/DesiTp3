@@ -7,7 +7,7 @@ public class LoginController {
 
     @GetMapping("/login")
     public String login() {
-        return "familias/login"; // Muestra login.html
+        return "login"; // Muestra login.html
     }
 }
 

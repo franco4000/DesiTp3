@@ -30,7 +30,11 @@ public abstract class Ingrediente {
 
 	@Column(nullable = false)
     private Boolean activo = true;
-
+	
+	public abstract TipoIngrediente getTipo();
+	
+	
+	
     public Boolean getActivo() {
 		return activo;
 	}

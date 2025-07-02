@@ -25,12 +25,13 @@
 		    <h3>Ingrediente [[${iterStat.index + 1}]]</h3>
 
 		    <label>Ingrediente:</label>
-		    <select th:field="*{items[__${iterStat.index}__].ingrediente}">
-		        <option value="" disabled selected>-- Seleccionar --</option>
-		        <option th:each="ing : ${ingredientesDisponibles}"
-		                th:value="${ing.id}"
-		                th:text="${ing.nombre}">Ingrediente</option>
-		    </select>
+			<select th:field="*{items[__${iterStat.index}__].ingredienteId}">
+			    <option value="" disabled selected>-- Seleccionar --</option>
+			    <option th:each="ing : ${ingredientesDisponibles}"
+			            th:value="${ing.id}"
+			            th:text="${ing.nombre}">Ingrediente</option>
+			</select>
+
 
 		    <label>Cantidad (kg):</label>
 		    <input type="number" step="0.01"
