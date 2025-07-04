@@ -33,8 +33,10 @@ public class IntegranteForm {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate fechaNacimiento;
     private String domicilio;
-    @Min(value = 0, message = "La edad debe ser positiva")
-    private int edad;
+    @NotNull(message = "La edad es obligatoria")
+    @Min(value = 0, message = "La edad debe ser 0 o mayor")
+    @Max(value = 120, message = "La edad no puede ser mayor a 120")
+    private Integer edad;
     @NotBlank(message = "El parentesco no puede estar vacío")
     @Pattern(regexp = "^[A-Za-zÁÉÍÓÚáéíóúñÑ\\s]+$", message = "Solo se permiten letras")
     @Size(min = 2, message = "Debe tener al menos 2 caracteres")
@@ -90,10 +92,10 @@ public class IntegranteForm {
 	public void setDomicilio(String domicilio) {
 		this.domicilio = domicilio;
 	}
-	public int getEdad() {
+	public Integer getEdad() {
 		return edad;
 	}
-	public void setEdad(int edad) {
+	public void setEdad(Integer edad) {
 		this.edad = edad;
 	}
 	public String getParentesco() {
@@ -108,9 +110,5 @@ public class IntegranteForm {
 	public void setOcupacion(Ocupacion ocupacion) {
 		this.ocupacion = ocupacion;
 	}
-
-    
-    
-    
     
 }

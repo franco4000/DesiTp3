@@ -3,6 +3,8 @@ package ong.desi.entity;
 import ong.desi.entity.Ocupacion;
 import ong.desi.entity.Familia;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
+
 import java.time.LocalDate;
 
 @Entity
@@ -10,7 +12,8 @@ public class Integrante extends Persona {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-    private int edad;
+	@Min(value = 0, message = "La edad debe ser 0 o mayor")
+	private Integer edad;
     private String parentesco;
 
     @Enumerated(EnumType.STRING)

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Familias - Página Principal</title>
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head>
+<body>
+
+<!-- Menú común -->
+<div th:replace="recetas/menu :: navbar"></div> 
+<!-- Contenido -->
+<div style="max-width: 600px; margin: auto;">
+    <h2>Bienvenido al Sistema de Gestión de Familias</h2>
+
+    <a th:href="@{/vista/familias/nueva}" class="boton">Registrar Nueva Familia</a>
+    <a th:href="@{/vista/familias}" class="boton">Listado de Familias</a>
+</div>
+
+</body>
+</html>

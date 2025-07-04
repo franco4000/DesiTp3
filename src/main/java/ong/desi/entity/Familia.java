@@ -17,7 +17,7 @@ public class Familia {
     private LocalDate fechaUltimaAsistencia; 
 
     //mappedBy = "familia": indica que la relación está mapeada en el atributo familia de la clase Integrante.
-    @OneToMany(mappedBy = "familia", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "familia", cascade = CascadeType.ALL,orphanRemoval = true)
     private List<Integrante> integrantes = new ArrayList<>(); 
     @OneToMany(mappedBy = "familia")
     private List<Asistido> asistidos;

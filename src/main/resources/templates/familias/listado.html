@@ -14,6 +14,17 @@
 	<form th:action="@{/vista/familias/nueva}" method="get">
 	    <button type="submit" class="btn-volver-formulario">+ Agregar Nueva Familia con Integrantes</button>
 	</form>
+	<!-- FORMULARIO DE BÚSQUEDA -->
+	<form th:action="@{/vista/familias}" method="get" style="margin-bottom: 1rem;">
+	    <label for="id">Buscar por ID:</label>
+	    <input type="number" id="id" name="id" placeholder="ID de familia">
+
+	    <label for="nombre">Buscar por nombre:</label>
+	    <input type="text" id="nombre" name="nombre" placeholder="Apellido, nombre o apodo">
+
+	    <button type="submit" class="btn">Buscar</button>
+	</form>
+
     <table border="1">
         <thead>
             <tr>

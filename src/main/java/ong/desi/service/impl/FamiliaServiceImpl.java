@@ -28,37 +28,50 @@ public class FamiliaServiceImpl implements FamiliaService {//implementa los mét
 	    private IntegranteRepository integranteRepository;
 
 	  @Override
-	  public Familia crearFamilia(Familia familia) throws Excepcion {// validando datos y guardando tanto la familia como sus integrantes.
+	  public Familia crearFamilia(Familia familia) throws Excepcion {
 	      // Validación básica del nombre
 	      if (familia.getNombre() == null || familia.getNombre().trim().isEmpty()) {
 	          throw new Excepcion("El nombre de la familia es requerido", "nombre");
 	      }
 
+	      // Simulación de fecha de última asistencia
+	      familia.setFechaUltimaAsistencia(LocalDate.now());
+
+	      // Filtramos los integrantes válidos (no vacíos)
+	      List<Integrante> integrantesValidos = familia.getIntegrantes() != null
+	          ? familia.getIntegrantes().stream()
+	              .filter(i -> !esIntegranteVacio(i))
+	              .collect(Collectors.toList())
+	          : List.of();
+
 	      // Validación de DNI duplicado
-	      if (familia.getIntegrantes() != null) {
-	          for (Integrante integrante : familia.getIntegrantes()) {
-	              if (integranteRepository.existsByDni(integrante.getDni())) {
-	                  throw new Excepcion("Ya existe un integrante con el DNI " + integrante.getDni(), "dni");
-	              }
+	      for (Integrante integrante : integrantesValidos) {
+	          if (integranteRepository.existsByDni(integrante.getDni())) {
+	              throw new Excepcion("Ya existe un integrante con el DNI " + integrante.getDni(), "dni");
 	          }
 	      }
-
-	      //  Simulación de fecha de última asistencia
-	      familia.setFechaUltimaAsistencia(LocalDate.now());
 
 	      // Guardamos la familia
 	      Familia familiaGuardada = familiaRepository.save(familia);
 
-	      // Guardamos los integrantes y vinculamos con la familia
-	      if (familia.getIntegrantes() != null) {
-	          for (Integrante integrante : familia.getIntegrantes()) {
-	              integrante.setFamilia(familiaGuardada);
-	              integranteRepository.save(integrante);
-	          }
+	      // Guardamos los integrantes válidos y vinculamos con la familia
+	      for (Integrante integrante : integrantesValidos) {
+	          integrante.setFamilia(familiaGuardada);
+	          integrante.setActivo(true); // Aseguramos estado activo
+	          integranteRepository.save(integrante);
 	      }
 
 	      return familiaGuardada;
 	  }
+
+	  private boolean esIntegranteVacio(Integrante i) {
+		    return i.getDni() == null &&
+		           (i.getNombre() == null || i.getNombre().isBlank()) &&
+		           (i.getApellido() == null || i.getApellido().isBlank()) &&
+		           i.getFechaNacimiento() == null &&
+		           (i.getParentesco() == null || i.getParentesco().isBlank()) &&
+		           i.getOcupacion() == null;
+		}
 
 	  
 	  
@@ -122,40 +135,57 @@ public class FamiliaServiceImpl implements FamiliaService {//implementa los mét
 	        // 2. Actualizamos integrantes  Marcar como inactivos los que ya no están
 	        if (familiaActualizada.getIntegrantes() != null) {
 	            // Primero, marcamos como inactivos los actuales que no estén en la nueva lista
-	            for (Integrante existente : familiaExistente.getIntegrantes()) {
-	                boolean sigueEnLista = familiaActualizada.getIntegrantes().stream()
-	                    .anyMatch(i -> i.getDni().equals(existente.getDni()));
-	                if (!sigueEnLista) {
-	                    existente.setActivo(false); // eliminación lógica
-	                    integranteRepository.save(existente);
-	                }
-	            }
-
+	        	 for (Integrante existente : familiaExistente.getIntegrantes()) {
+	                 boolean sigue = familiaActualizada.getIntegrantes().stream()
+	                     .anyMatch(i -> i.getDni() != null && i.getDni().equals(existente.getDni()));
+	                 if (!sigue) {
+	                     existente.setActivo(false);
+	                     integranteRepository.save(existente);
+	                 }
+	             }
 	            // Segundo, recorremos los nuevos integrantes
 	            for (Integrante nuevo : familiaActualizada.getIntegrantes()) {
-	                // Verificamos si ya existe por DNI
-	                Integrante existente = integranteRepository.findByDni(nuevo.getDni()).orElse(null);
+	            	 //  Valida si el integrante está vacío
+	                boolean vacio = 
+	                    (nuevo.getDni() == null) &&
+	                    (nuevo.getNombre() == null || nuevo.getNombre().isBlank()) &&
+	                    (nuevo.getApellido() == null || nuevo.getApellido().isBlank()) &&
+	                    (nuevo.getFechaNacimiento() == null) &&
+	                    (nuevo.getParentesco() == null || nuevo.getParentesco().isBlank()) &&
+	                    (nuevo.getOcupacion() == null);
+
+	                if (vacio) {
+	                    System.out.println(">>> Integrante vacío detectado y omitido");
+	                    continue; // saltamos este integrante
+	                }
+	            	
+	                // Buscar por DNI
+	                Integrante existente = null;
+	                if (nuevo.getDni() != null) {
+	                    existente = integranteRepository.findByDni(nuevo.getDni()).orElse(null);
+	                }
+
 	                if (existente != null) {
-	                    // Actualizamos datos del integrante existente
+	                    // Actualizar campos del integrante existente
 	                    existente.setNombre(nuevo.getNombre());
 	                    existente.setApellido(nuevo.getApellido());
 	                    existente.setFechaNacimiento(nuevo.getFechaNacimiento());
 	                    existente.setOcupacion(nuevo.getOcupacion());
 	                    existente.setParentesco(nuevo.getParentesco());
 	                    existente.setEdad(nuevo.getEdad());
-	                    existente.setActivo(true); // por si estaba dado de baja
+	                    existente.setActivo(true);
 	                    integranteRepository.save(existente);
 	                } else {
-	                    // Es un nuevo integrante
+	                    // Crear nuevo integrante
 	                    nuevo.setFamilia(familiaExistente);
 	                    nuevo.setActivo(true);
 	                    integranteRepository.save(nuevo);
 	                }
 	            }
 	        }
-
 	        return familiaRepository.save(familiaExistente);//guardamos cambios
 	    }
+	    
 	    public FamiliaForm convertirAFamiliaForm(Familia familia) {
 	        FamiliaForm form = new FamiliaForm();
 	        form.setId(familia.getId());
@@ -179,7 +209,9 @@ public class FamiliaServiceImpl implements FamiliaService {//implementa los mét
 	                    return iform;
 	                })
 	                .collect(Collectors.toList());
-
+	        if (integranteForms.isEmpty()) {
+	            integranteForms.add(new IntegranteForm());
+	        }
 	        form.setIntegrantes(integranteForms);
 	        return form;
 	    }

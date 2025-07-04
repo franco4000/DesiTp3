@@ -20,7 +20,7 @@ public interface FamiliaRepository extends JpaRepository<Familia, Long> {
 
 	 List<Familia> findByActivaTrue();
 
-	 @Query("SELECT f FROM Familia f WHERE LOWER(f.nombre) LIKE LOWER(CONCAT('%', :nombre, '%')) AND f.activa = true")
+	 @Query("SELECT f FROM Familia f WHERE f.activa = true AND LOWER(f.nombre) LIKE LOWER(CONCAT('%', :nombre, '%'))")
 	 List<Familia> buscarPorNombreParcial(@Param("nombre") String nombre);
 
 } 
